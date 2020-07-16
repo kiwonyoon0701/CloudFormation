@@ -36,7 +36,7 @@ Parameters:
     Default: 10.100.102.0/24
 
   KeyName:
-    Description: EC2 key pair name for Webserver host SSH access
+    Description: EC2 key pair name for Oracle
     Type: AWS::EC2::KeyPair::KeyName
 
 Resources:
@@ -240,3 +240,46 @@ Outputs:
   NoIngressSecurityGroup:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
+
+  WebserverInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m4.xlarge
+      KeyName: !Ref KeyName
+      #IamInstanceProfile: !Ref WebserverProfile
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref OracleNetworkInterface
+          DeviceIndex: 0
+      ImageId: ami-0e63e3e96d7d9e456
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-OracleOnPrem"
+
+  OracleNetworkInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      GroupSet:
+        - !Ref OracleSecurityGroup
+      SourceDestCheck: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-OracleOnPremENI"
+
+  OracleSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable access to the Oracle OnPrem
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - CidrIp: 10.100.0.0/16
+          IpProtocol: tcp
+          ToPort: 22
+          FromPort: 22
+        - CidrIp: 10.100.0.0/16
+          IpProtocol: tcp
+          ToPort: 1521
+          FromPort: 1521
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
