@@ -241,7 +241,7 @@ Outputs:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
 
-  WebserverInstance:
+  OracleInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: m4.xlarge
@@ -276,10 +276,6 @@ Outputs:
           IpProtocol: tcp
           ToPort: 22
           FromPort: 22
-        - CidrIp: 10.100.0.0/16
-          IpProtocol: tcp
-          ToPort: 1521
-          FromPort: 1521
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: -1
