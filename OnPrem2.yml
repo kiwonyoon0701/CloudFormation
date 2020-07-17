@@ -1,4 +1,4 @@
-#EC2 with profile success
+#EC2 with profile success (Oracle,Tomcat)
 Description:
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an Internet Gateway, with a default
@@ -238,6 +238,12 @@ Resources:
       Roles:
         - !Ref EC2SSMRole
 
+  WindowsProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2SSMRole
+
   OracleSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -284,7 +290,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref OracleNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0e63e3e96d7d9e456
+      ImageId: ami-013ad504e4fcbb4d8
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleOnPrem"
@@ -337,6 +343,50 @@ Resources:
         - Key: Name
           Value: !Sub "Tomcat"
     DependsOn: TomcatNetworkInterface
+
+  WindowsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable access to the Tomcat Server
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          ToPort: 3389
+          FromPort: 3389
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-WindowsSecurityGroup"
+
+  WindowsNetworkInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      GroupSet:
+        - !Ref WindowsSecurityGroup
+      SourceDestCheck: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-WindowsENI"
+    DependsOn: PublicSubnet1RouteTableAssociation
+
+  WindowsOnPremInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m4.xlarge
+      KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref WindowsProfile
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref WindowsNetworkInterface
+          DeviceIndex: 0
+      ImageId: ami-03864c36f8f082abb
+      Tags:
+        - Key: Name
+          Value: !Sub "WindowsServer"
+    DependsOn: WindowsNetworkInterface
 
 Outputs:
   VPC:
