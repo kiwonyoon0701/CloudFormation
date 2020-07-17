@@ -6,32 +6,32 @@ Description:
   and default routes for them in the private subnets.
 
 Parameters:
-  EnvironmentName:
+  OnPremEnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
     Default: OnPREM
 
-  VpcCIDR:
+  OnPremVpcCIDR:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
     Default: 10.100.0.0/16
 
-  PublicSubnet1CIDR:
+  OnPremPublicSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
     Type: String
     Default: 10.100.1.0/24
 
-  PublicSubnet2CIDR:
+  OnPremPublicSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
     Type: String
     Default: 10.100.2.0/24
 
-  PrivateSubnet1CIDR:
+  OnPremPrivateSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
     Type: String
     Default: 10.100.101.0/24
 
-  PrivateSubnet2CIDR:
+  OnPremPrivateSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
     Type: String
     Default: 10.100.102.0/24
@@ -41,175 +41,175 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
 
 Resources:
-  VPC:
+  OnPremVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref VpcCIDR
+      CidrBlock: !Ref OnPremVpcCIDR
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: !Ref EnvironmentName
+          Value: !Ref OnPremEnvironmentName
 
-  InternetGateway:
+  OnPremInternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: !Ref EnvironmentName
+          Value: !Ref OnPremEnvironmentName
 
-  InternetGatewayAttachment:
+  OnPremInternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      InternetGatewayId: !Ref InternetGateway
-      VpcId: !Ref VPC
+      InternetGatewayId: !Ref OnPremInternetGateway
+      VpcId: !Ref OnPremVPC
 
-  PublicSubnet1:
+  OnPremPublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PublicSubnet1CIDR
+      CidrBlock: !Ref OnPremPublicSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+          Value: !Sub ${OnPremEnvironmentName} Public Subnet (AZ1)
 
-  PublicSubnet2:
+  OnPremPublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PublicSubnet2CIDR
+      CidrBlock: !Ref OnPremPublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+          Value: !Sub ${OnPremEnvironmentName} Public Subnet (AZ2)
 
-  PrivateSubnet1:
+  OnPremPrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PrivateSubnet1CIDR
+      CidrBlock: !Ref OnPremPrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+          Value: !Sub ${OnPremEnvironmentName} Private Subnet (AZ1)
 
-  PrivateSubnet2:
+  OnPremPrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PrivateSubnet2CIDR
+      CidrBlock: !Ref OnPremPrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
+          Value: !Sub ${OnPremEnvironmentName} Private Subnet (AZ2)
 
-  NatGateway1EIP:
+  OnPremNatGateway1EIP:
     Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
+    DependsOn: OnPremInternetGatewayAttachment
     Properties:
       Domain: vpc
 
-  NatGateway2EIP:
+  OnPremNatGateway2EIP:
     Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
+    DependsOn: OnPremInternetGatewayAttachment
     Properties:
       Domain: vpc
 
-  NatGateway1:
+  OnPremNatGateway1:
     Type: AWS::EC2::NatGateway
     Properties:
-      AllocationId: !GetAtt NatGateway1EIP.AllocationId
-      SubnetId: !Ref PublicSubnet1
+      AllocationId: !GetAtt OnPremNatGateway1EIP.AllocationId
+      SubnetId: !Ref OnPremPublicSubnet1
 
-  NatGateway2:
+  OnPremNatGateway2:
     Type: AWS::EC2::NatGateway
     Properties:
-      AllocationId: !GetAtt NatGateway2EIP.AllocationId
-      SubnetId: !Ref PublicSubnet2
+      AllocationId: !GetAtt OnPremNatGateway2EIP.AllocationId
+      SubnetId: !Ref OnPremPublicSubnet2
 
-  PublicRouteTable:
+  OnPremPublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Routes
+          Value: !Sub ${OnPremEnvironmentName} Public Routes
 
-  DefaultPublicRoute:
+  OnPremDefaultPublicRoute:
     Type: AWS::EC2::Route
-    DependsOn: InternetGatewayAttachment
+    DependsOn: OnPremInternetGatewayAttachment
     Properties:
-      RouteTableId: !Ref PublicRouteTable
+      RouteTableId: !Ref OnPremPublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
+      GatewayId: !Ref OnPremInternetGateway
 
-  PublicSubnet1RouteTableAssociation:
+  OnPremPublicSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref OnPremPublicRouteTable
+      SubnetId: !Ref OnPremPublicSubnet1
 
-  PublicSubnet2RouteTableAssociation:
+  OnPremPublicSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref OnPremPublicRouteTable
+      SubnetId: !Ref OnPremPublicSubnet2
 
-  PrivateRouteTable1:
+  OnPremPrivateRouteTable1:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Private Routes (AZ1)
+          Value: !Sub ${OnPremEnvironmentName} Private Routes (AZ1)
 
-  DefaultPrivateRoute1:
+  OnPremDefaultPrivateRoute1:
     Type: AWS::EC2::Route
     Properties:
-      RouteTableId: !Ref PrivateRouteTable1
+      RouteTableId: !Ref OnPremPrivateRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway1
+      NatGatewayId: !Ref OnPremNatGateway1
 
-  PrivateSubnet1RouteTableAssociation:
+  OnPremPrivateSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PrivateRouteTable1
-      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref OnPremPrivateRouteTable1
+      SubnetId: !Ref OnPremPrivateSubnet1
 
-  PrivateRouteTable2:
+  OnPremPrivateRouteTable2:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Private Routes (AZ2)
+          Value: !Sub ${OnPremEnvironmentName} Private Routes (AZ2)
 
-  DefaultPrivateRoute2:
+  OnPremDefaultPrivateRoute2:
     Type: AWS::EC2::Route
     Properties:
-      RouteTableId: !Ref PrivateRouteTable2
+      RouteTableId: !Ref OnPremPrivateRouteTable2
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway2
+      NatGatewayId: !Ref OnPremNatGateway2
 
-  PrivateSubnet2RouteTableAssociation:
+  OnPremPrivateSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PrivateRouteTable2
-      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref OnPremPrivateRouteTable2
+      SubnetId: !Ref OnPremPrivateSubnet2
 
-  NoIngressSecurityGroup:
+  OnPremNoIngressSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: "no-ingress-sg"
       GroupDescription: "Security group with no ingress rule"
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
 
-  EC2SSMRole:
+  OnPremEC2SSMRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -224,37 +224,37 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
       Path: "/"
-      RoleName: EC2SSMRole
+      RoleName: OnPremEC2SSMRole
 
-  OracleProfile:
+  OnPremOracleProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - !Ref EC2SSMRole
+        - !Ref OnPremEC2SSMRole
 
-  TomcatProfile:
+  OnPremTomcatProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - !Ref EC2SSMRole
+        - !Ref OnPremEC2SSMRole
 
-  WindowsProfile:
+  OnPremWindowsProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - !Ref EC2SSMRole
+        - !Ref OnPremEC2SSMRole
 
-  OracleSecurityGroup:
+  OnPremOracleSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable access to the Oracle Server
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: tcp
           ToPort: 22
           FromPort: 22
-        - CidrIp: !Ref VpcCIDR
+        - CidrIp: !Ref OnPremVpcCIDR
           IpProtocol: tcp
           ToPort: 1521
           FromPort: 1521
@@ -269,38 +269,38 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleSecurityGroup"
 
-  OracleNetworkInterface:
+  OnPremOracleNetworkInterface:
     Type: AWS::EC2::NetworkInterface
     Properties:
-      SubnetId: !Ref PrivateSubnet1
+      SubnetId: !Ref OnPremPrivateSubnet1
       GroupSet:
-        - !Ref OracleSecurityGroup
+        - !Ref OnPremOracleSecurityGroup
       SourceDestCheck: true
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleENI"
-    DependsOn: PrivateSubnet1RouteTableAssociation
+    DependsOn: OnPremPrivateSubnet1RouteTableAssociation
 
-  OracleOnPremInstance:
+  OnPremOracleOnPremInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: m4.xlarge
       KeyName: !Ref KeyName
-      IamInstanceProfile: !Ref OracleProfile
+      IamInstanceProfile: !Ref OnPremOracleProfile
       NetworkInterfaces:
-        - NetworkInterfaceId: !Ref OracleNetworkInterface
+        - NetworkInterfaceId: !Ref OnPremOracleNetworkInterface
           DeviceIndex: 0
       ImageId: ami-013ad504e4fcbb4d8
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleOnPrem"
-    DependsOn: OracleNetworkInterface
+    DependsOn: OnPremOracleNetworkInterface
 
-  TomcatSecurityGroup:
+  OnPremTomcatSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable access to the Tomcat Server
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -317,38 +317,38 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-TomcatSecurityGroup"
 
-  TomcatNetworkInterface:
+  OnPremTomcatNetworkInterface:
     Type: AWS::EC2::NetworkInterface
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref OnPremPublicSubnet1
       GroupSet:
-        - !Ref TomcatSecurityGroup
+        - !Ref OnPremTomcatSecurityGroup
       SourceDestCheck: true
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-TomcatENI"
-    DependsOn: PublicSubnet1RouteTableAssociation
+    DependsOn: OnPremPublicSubnet1RouteTableAssociation
 
-  TomcatOnPremInstance:
+  OnPremTomcatOnPremInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: m4.xlarge
       KeyName: !Ref KeyName
-      IamInstanceProfile: !Ref TomcatProfile
+      IamInstanceProfile: !Ref OnPremTomcatProfile
       NetworkInterfaces:
-        - NetworkInterfaceId: !Ref TomcatNetworkInterface
+        - NetworkInterfaceId: !Ref OnPremTomcatNetworkInterface
           DeviceIndex: 0
       ImageId: ami-0ebbe1f22ae2f47d1
       Tags:
         - Key: Name
-          Value: !Sub "Tomcat"
-    DependsOn: TomcatNetworkInterface
+          Value: !Sub "OnPremTomcat"
+    DependsOn: OnPremTomcatNetworkInterface
 
-  WindowsSecurityGroup:
+  OnPremWindowsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable access to the Windows Server
-      VpcId: !Ref VPC
+      VpcId: !Ref OnPremVPC
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -361,78 +361,74 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-WindowsSecurityGroup"
 
-  WindowsNetworkInterface:
+  OnPremWindowsNetworkInterface:
     Type: AWS::EC2::NetworkInterface
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref OnPremPublicSubnet1
       GroupSet:
-        - !Ref WindowsSecurityGroup
+        - !Ref OnPremWindowsSecurityGroup
       SourceDestCheck: true
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-WindowsENI"
-    DependsOn: PublicSubnet1RouteTableAssociation
+    DependsOn: OnPremPublicSubnet1RouteTableAssociation
 
-  WindowsOnPremInstance:
+  OnPremWindowsOnPremInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: m4.xlarge
       KeyName: !Ref KeyName
-      IamInstanceProfile: !Ref WindowsProfile
+      IamInstanceProfile: !Ref OnPremWindowsProfile
       NetworkInterfaces:
-        - NetworkInterfaceId: !Ref WindowsNetworkInterface
+        - NetworkInterfaceId: !Ref OnPremWindowsNetworkInterface
           DeviceIndex: 0
       ImageId: ami-02e78fb759d303bf6
       Tags:
         - Key: Name
-          Value: !Sub "WindowsServer"
-    DependsOn: WindowsNetworkInterface
+          Value: !Sub "OnPremWindowsServer"
+    DependsOn: OnPremWindowsNetworkInterface
 
 Outputs:
-  VPC:
+  OnPremVPC:
     Description: A reference to the created VPC
-    Value: !Ref VPC
+    Value: !Ref OnPremVPC
 
-  PublicSubnets:
+  OnPremPublicSubnets:
     Description: A list of the public subnets
-    Value: !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2]]
+    Value: !Join [",", [!Ref OnPremPublicSubnet1, !Ref OnPremPublicSubnet2]]
 
-  PrivateSubnets:
+  OnPremPrivateSubnets:
     Description: A list of the private subnets
-    Value: !Join [",", [!Ref PrivateSubnet1, !Ref PrivateSubnet2]]
+    Value: !Join [",", [!Ref OnPremPrivateSubnet1, !Ref OnPremPrivateSubnet2]]
 
-  PublicSubnet1:
+  OnPremPublicSubnet1:
     Description: A reference to the public subnet in the 1st Availability Zone
-    Value: !Ref PublicSubnet1
+    Value: !Ref OnPremPublicSubnet1
 
-  PublicSubnet2:
+  OnPremPublicSubnet2:
     Description: A reference to the public subnet in the 2nd Availability Zone
-    Value: !Ref PublicSubnet2
+    Value: !Ref OnPremPublicSubnet2
 
-  PrivateSubnet1:
+  OnPremPrivateSubnet1:
     Description: A reference to the private subnet in the 1st Availability Zone
-    Value: !Ref PrivateSubnet1
+    Value: !Ref OnPremPrivateSubnet1
 
-  PrivateSubnet2:
+  OnPremPrivateSubnet2:
     Description: A reference to the private subnet in the 2nd Availability Zone
-    Value: !Ref PrivateSubnet2
+    Value: !Ref OnPremPrivateSubnet2
 
-  NoIngressSecurityGroup:
-    Description: Security group with no ingress rule
-    Value: !Ref NoIngressSecurityGroup
-
-  OraclePrivateIP:
+  OnPremOraclePrivateIP:
     Description: Oracle Private IP
-    Value: !GetAtt OracleNetworkInterface.PrimaryPrivateIpAddress
+    Value: !GetAtt OnPremOracleNetworkInterface.PrimaryPrivateIpAddress
 
-  TomcatPublicIP:
+  OnPremTomcatPublicIP:
     Description: Tomat Public IP
-    Value: !GetAtt TomcatOnPremInstance.PublicIp
+    Value: !GetAtt OnPremTomcatOnPremInstance.PublicIp
     Export:
       Name: !Sub "${AWS::StackName}-TomcatPublicIp"
 
-  WindowsPublicIP:
+  OnPremWindowsPublicIP:
     Description: Windows Server Public IP
-    Value: !GetAtt WindowsOnPremInstance.PublicIp
+    Value: !GetAtt OnPremWindowsOnPremInstance.PublicIp
     Export:
       Name: !Sub "${AWS::StackName}-WindowsServerPublicIp"
