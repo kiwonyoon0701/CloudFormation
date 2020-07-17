@@ -347,7 +347,7 @@ Resources:
   WindowsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable access to the Tomcat Server
+      GroupDescription: Enable access to the Windows Server
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
@@ -420,3 +420,11 @@ Outputs:
   NoIngressSecurityGroup:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
+
+  OraclePrivateIP:
+    Description: Oracle Private IP
+    Value: !GetAtt OracleNetworkInterface.PrimaryPrivateIpAddress
+
+  TomcatPublicIP:
+    Description: Tomcat Public IP
+    Value: !GetAtt TomcatOnPremInstance.PublicIP
