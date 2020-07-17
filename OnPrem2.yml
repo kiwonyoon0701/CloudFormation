@@ -428,3 +428,7 @@ Outputs:
   TomcatPublicIP:
     Description: Tomcat Public IP
     Value: !GetAtt TomcatOnPremInstance.PublicIP
+
+  WindowsServerPublicIP:
+    Description: Windows Server Public IP
+    Value: !GetAtt WindowsOnPremInstance.PublicIP
