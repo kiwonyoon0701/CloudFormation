@@ -208,6 +208,29 @@ Resources:
       GroupDescription: "Security group with no ingress rule"
       VpcId: !Ref VPC
 
+  EC2SSMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ssm.amazonaws.com
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      Path: "/"
+      RoleName: EC2SSMRole
+
+  OracleProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2SSMRole
+
   OracleSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -229,9 +252,36 @@ Resources:
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: -1
-       Tags:
+      Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleSecurityGroup"
+
+  OracleNetworkInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      GroupSet:
+        - !Ref OracleSecurityGroup
+      SourceDestCheck: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-OracleENI"
+    DependsOn: PrivateSubnet1RouteTableAssociation
+
+  OracleOnPremInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m4.xlarge
+      KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref OracleProfile
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref OracleNetworkInterface
+          DeviceIndex: 0
+      ImageId: ami-0e63e3e96d7d9e456
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-OracleOnPrem"
+    DependsOn: OracleNetworkInterface
 
 Outputs:
   VPC:
