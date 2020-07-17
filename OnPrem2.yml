@@ -382,7 +382,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref WindowsNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-03864c36f8f082abb
+      ImageId: ami-02e78fb759d303bf6
       Tags:
         - Key: Name
           Value: !Sub "WindowsServer"
