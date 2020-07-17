@@ -1,4 +1,4 @@
-#EC2 with profile success (Oracle,Tomcat)
+#basically this template almost same as OnPrem2.yml, but added prerfix OnPrem in front of variables
 Description:
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an Internet Gateway, with a default
@@ -35,6 +35,36 @@ Parameters:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
     Type: String
     Default: 10.100.102.0/24
+
+  AWSDCEnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: AWSDC
+
+  AWSDCVpcCIDR:
+    Description: Please enter the IP range (CIDR notation) for this VPC
+    Type: String
+    Default: 10.200.0.0/16
+
+  AWSDCPublicSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.200.1.0/24
+
+  AWSDCPublicSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.200.2.0/24
+
+  AWSDCPrivateSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.200.101.0/24
+
+  AWSDCPrivateSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
+    Type: String
+    Default: 10.200.102.0/24
 
   KeyName:
     Description: EC2 key pair name for Oracle Server
