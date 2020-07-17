@@ -426,9 +426,13 @@ Outputs:
     Value: !GetAtt OracleNetworkInterface.PrimaryPrivateIpAddress
 
   TomcatPublicIP:
-    Description: Tomcat Public IP
-    Value: !GetAtt TomcatOnPremInstance.PublicIP
+    Description: Tomat Public IP
+    Value: !GetAtt TomcatOnPremInstance.PublicIp
+    Export:
+      Name: !Sub "${AWS::StackName}-TomcatPublicIp"
 
-  WindowsServerPublicIP:
+  WindowsPublicIP:
     Description: Windows Server Public IP
-    Value: !GetAtt WindowsOnPremInstance.PublicIP
+    Value: !GetAtt WindowsOnPremInstance.PublicIp
+    Export:
+      Name: !Sub "${AWS::StackName}-WindowsServerPublicIp"
