@@ -127,12 +127,18 @@ Resources:
     Properties:
       AllocationId: !GetAtt NatGateway1EIP.AllocationId
       SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} NatGateway1
 
   NatGateway2:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGateway2EIP.AllocationId
       SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} NatGateway2
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -295,7 +301,7 @@ Resources:
       ImageId: ami-013ad504e4fcbb4d8
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName}-OracleOnPrem"
+          Value: !Sub "${AWS::StackName}-OracleServer"
     DependsOn: OracleNetworkInterface
 
   TomcatSecurityGroup:
@@ -343,7 +349,7 @@ Resources:
       ImageId: ami-0ebbe1f22ae2f47d1
       Tags:
         - Key: Name
-          Value: !Sub "Tomcat"
+          Value: !Sub "${AWS::StackName}-Tomcat"
     DependsOn: TomcatNetworkInterface
 
   WindowsSecurityGroup:
@@ -387,7 +393,7 @@ Resources:
       ImageId: ami-0d617ea739f8b5212
       Tags:
         - Key: Name
-          Value: !Sub "WindowsServer"
+          Value: !Sub "${AWS::StackName}-WindowsServer"
     DependsOn: WindowsNetworkInterface
 
 Outputs:
@@ -423,17 +429,17 @@ Outputs:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
 
-  OraclePrivateIP:
+  IP-OraclePrivateIP:
     Description: Oracle Private IP
     Value: !GetAtt OracleNetworkInterface.PrimaryPrivateIpAddress
 
-  TomcatPublicIP:
+  IP-TomcatPublicIP:
     Description: Tomat Public IP
     Value: !GetAtt TomcatOnPremInstance.PublicIp
     Export:
       Name: !Sub "${AWS::StackName}-TomcatPublicIp"
 
-  WindowsPublicIP:
+  IP-WindowsPublicIP:
     Description: Windows Server Public IP
     Value: !GetAtt WindowsOnPremInstance.PublicIp
     Export:

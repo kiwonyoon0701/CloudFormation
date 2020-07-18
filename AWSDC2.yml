@@ -228,6 +228,54 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleSecurityGroup"
 
+  TomcatSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable access to the Tomcat Server
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          ToPort: 22
+          FromPort: 22
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          ToPort: 8080
+          FromPort: 8080
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TomcatSecurityGroup"
+
+  TomcatNetworkInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      GroupSet:
+        - !Ref TomcatSecurityGroup
+      SourceDestCheck: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TomcatENI"
+    DependsOn: PublicSubnet1RouteTableAssociation
+
+  TomcatOnPremInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m4.xlarge
+      KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref TomcatProfile
+      NetworkInterfaces:
+        - NetworkInterfaceId: !Ref TomcatNetworkInterface
+          DeviceIndex: 0
+      ImageId: ami-0ebbe1f22ae2f47d1
+      Tags:
+        - Key: Name
+          Value: !Sub "Tomcat"
+    DependsOn: TomcatNetworkInterface
+
 Outputs:
   VPC:
     Description: A reference to the created VPC
