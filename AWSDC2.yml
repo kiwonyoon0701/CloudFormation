@@ -215,7 +215,7 @@ Resources:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Path: "/"
-      Roles: "EC2SSMRole"
+      Roles: ["EC2SSMRole"]
 
   AWSDCAuroraSecurityGroup:
     Type: AWS::EC2::SecurityGroup
