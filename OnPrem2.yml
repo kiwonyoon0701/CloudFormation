@@ -429,17 +429,17 @@ Outputs:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
 
-  IP-OraclePrivateIP:
+  IPOraclePrivateIP:
     Description: Oracle Private IP
     Value: !GetAtt OracleNetworkInterface.PrimaryPrivateIpAddress
 
-  IP-TomcatPublicIP:
+  IPTomcatPublicIP:
     Description: Tomat Public IP
     Value: !GetAtt TomcatOnPremInstance.PublicIp
     Export:
       Name: !Sub "${AWS::StackName}-TomcatPublicIp"
 
-  IP-WindowsPublicIP:
+  IPWindowsPublicIP:
     Description: Windows Server Public IP
     Value: !GetAtt WindowsOnPremInstance.PublicIp
     Export:
