@@ -211,6 +211,11 @@ Resources:
       GroupDescription: "Security group with no ingress rule"
       VpcId: !Ref VPC
 
+  TomcatProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: EC2SSMRole
+
   AWSDCAuroraSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -273,7 +278,7 @@ Resources:
       ImageId: ami-0ebbe1f22ae2f47d1
       Tags:
         - Key: Name
-          Value: !Sub "Tomcat"
+          Value: !Sub "${AWS::StackName}-Tomcat"
     DependsOn: TomcatNetworkInterface
 
 Outputs:
@@ -308,3 +313,7 @@ Outputs:
   NoIngressSecurityGroup:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
+
+  IP-AWSDC-TomcatPrivateIP:
+    Description: AWSDC Tomcat Private IP
+    Value: !GetAtt TomcatNetworkInterface.PrimaryPrivateIpAddres
