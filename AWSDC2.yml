@@ -214,7 +214,8 @@ Resources:
   TomcatProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Roles: EC2SSMRole
+      Path: "/"
+      Roles: "EC2SSMRole"
 
   AWSDCAuroraSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -257,14 +258,14 @@ Resources:
   TomcatNetworkInterface:
     Type: AWS::EC2::NetworkInterface
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref PrivateSubnet1
       GroupSet:
         - !Ref TomcatSecurityGroup
       SourceDestCheck: true
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-TomcatENI"
-    DependsOn: PublicSubnet1RouteTableAssociation
+    DependsOn: PrivateSubnet1RouteTableAssociation
 
   TomcatOnPremInstance:
     Type: AWS::EC2::Instance
@@ -314,6 +315,6 @@ Outputs:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
 
-  IP-AWSDC-TomcatPrivateIP:
+  IPAWSDCTomcatPrivateIP:
     Description: AWSDC Tomcat Private IP
-    Value: !GetAtt TomcatNetworkInterface.PrimaryPrivateIpAddres
+    Value: !GetAtt TomcatNetworkInterface.PrimaryPrivateIpAddress
