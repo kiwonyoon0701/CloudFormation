@@ -1,0 +1,6 @@
+
+            "ReplicationTaskArn": "arn:aws:dms:ap-northeast-2:664695030410:task:BBHBPE5BKNVXYJGCPYFLWRLPXGFZBIMHJJWAGSA",
+
+aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:BBHBPE5BKNVXYJGCPYFLWRLPXGFZBIMHJJWAGSA"
+aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:ZH4L4PMY34IEVWXEYCLCQZAI7FCBHY52NXQU7QA"
+aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:FY63WN6JCLNHMEDQDRWRKI4HRVDU5CUGO3VFRDY"
