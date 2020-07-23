@@ -1,6 +1,7 @@
 # This template create OnPrem VPC 10.100.0.0/16 to pair with AWSDC2.yml(AWSDC VPC 10.200.0.0/16)
 # Create VPC, Subnet, Routing Table, EC2(Oracle, Tomcat8, Windows2019)
 # Oracle start automatically, Tomcat8 also start Automatically
+## https://aws.amazon.com/ko/premiumsupport/knowledge-center/dms-cloudwatch-logs-not-appearing/
 Description:
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an Internet Gateway, with a default
@@ -298,7 +299,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref OracleNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-013ad504e4fcbb4d8
+      ImageId: ami-00bd1a9c70b338997
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleServer"
