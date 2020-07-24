@@ -287,7 +287,7 @@ Resources:
       SourceDestCheck: true
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName}-OracleENI"k
+          Value: !Sub "${AWS::StackName}-OracleENI"
     DependsOn: PrivateSubnet1RouteTableAssociation
 
   OracleOnPremInstance:
