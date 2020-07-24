@@ -287,7 +287,7 @@ Resources:
       SourceDestCheck: true
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName}-OracleENI"
+          Value: !Sub "${AWS::StackName}-OracleENI"k
     DependsOn: PrivateSubnet1RouteTableAssociation
 
   OracleOnPremInstance:
@@ -299,7 +299,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref OracleNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0bb3a52249d1632d4
+      ImageId: ami-0df013d6174558416
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleServer"
@@ -347,7 +347,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref TomcatNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0ebbe1f22ae2f47d1
+      ImageId: ami-05387942a4281beb3
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-Tomcat"
@@ -391,7 +391,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref WindowsNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0abf6e1dddd7101ca
+      ImageId: ami-0ed64b04976f29f2a
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-WindowsServer"
