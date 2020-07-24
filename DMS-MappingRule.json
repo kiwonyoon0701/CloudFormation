@@ -42,7 +42,7 @@
       "rule-name": "4",
       "object-locator": {
         "schema-name": "SOE",
-        "table-name": "ORDERS%"
+        "table-name": "ORDERS0%"
       },
       "rule-action": "include",
       "filters": []
