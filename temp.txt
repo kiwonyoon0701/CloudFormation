@@ -1,6 +1,27 @@
+IPOraclePrivateIP	10.100.101.191	Oracle Private IP	-
+IPTomcatPublicIP	3.34.43.230	Tomat Public IP	OnPREM-TomcatPublicIp
+IPWindowsPublicIP	3.34.255.218	Windows Server Public IP	OnPREM-WindowsServerPublicIp
 
-            "ReplicationTaskArn": "arn:aws:dms:ap-northeast-2:664695030410:task:BBHBPE5BKNVXYJGCPYFLWRLPXGFZBIMHJJWAGSA",
+IPAWSDCTomcatPrivateIP	10.200.101.35	AWSDC Tomcat Private IP	-
 
-aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:BBHBPE5BKNVXYJGCPYFLWRLPXGFZBIMHJJWAGSA"
-aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:ZH4L4PMY34IEVWXEYCLCQZAI7FCBHY52NXQU7QA"
-aws --region ap-northeast-2 dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:FY63WN6JCLNHMEDQDRWRKI4HRVDU5CUGO3VFRDY"
+awsdc-aurora.cluster-cf89zyffo8dr.ap-northeast-2.rds.amazonaws.com	
+
+
+
+<%@ page language="java" import="java.sql.*" %>
+<%
+String DB_HOST_IP="10.100.101.244";
+String DB_URL = "jdbc:oracle:thin:@" + DB_HOST_IP + ":1521:salesdb";
+String DB_USER = "oshop";
+String DB_PASSWORD = "Octank#1234";
+Connection con = null;
+Statement stmt = null;
+ResultSet rs = null;
+String sql=null;
+try
+ {
+ Class.forName("oracle.jdbc.driver.OracleDriver");
+ con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+ //out.println("Oracle Database Connected!");
+ }catch(SQLException e){out.println(e);}
+%>

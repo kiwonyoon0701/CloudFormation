@@ -1,0 +1,1 @@
+aws dms describe-replication-tasks --filters Name="replication-task-arn",Values="arn:aws:dms:ap-northeast-2:664695030410:task:FY63WN6JCLNHMEDQDRWRKI4HRVDU5CUGO3VFRDY"
