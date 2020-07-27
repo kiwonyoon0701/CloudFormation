@@ -1,11 +1,11 @@
-Oracle1 : 
-10.100.1.102
+IPOraclePrivateIP	
+10.100.101.128
+IPTomcatPublicIP	
+54.180.140.11
+IPWindowsPublicIP	
+52.79.43.235
 
-Aurora1 :
-awsdc-aurora.cluster-cf89zyffo8dr.ap-northeast-2.rds.amazonaws.com	
 
-Oracle2 : 
-10.100.1.97
 
-Aurora2 :
-awsdc-aurora02.cluster-cf89zyffo8dr.ap-northeast-2.rds.amazonaws.com	
+IPAWSDCTomcatPrivateIP	
+10.200.101.179

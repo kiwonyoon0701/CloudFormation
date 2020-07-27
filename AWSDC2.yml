@@ -280,7 +280,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref TomcatNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0090122fe3226e913
+      ImageId: ami-0726e83d5306b5ea8
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-Tomcat"

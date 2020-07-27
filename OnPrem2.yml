@@ -303,7 +303,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref OracleNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0e5ab3335b1a46c23
+      ImageId: ami-0809b37f804d7c787
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleServer"
@@ -351,7 +351,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref TomcatNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0090122fe3226e913
+      ImageId: ami-0726e83d5306b5ea8
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-Tomcat"
@@ -395,7 +395,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref WindowsNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0e6afd64d496ea23c
+      ImageId: ami-033c9553a04822f76
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-WindowsServer"
