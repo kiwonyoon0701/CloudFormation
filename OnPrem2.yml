@@ -3,7 +3,7 @@
 # Oracle start automatically, Tomcat8 also start Automatically
 ## https://aws.amazon.com/ko/premiumsupport/knowledge-center/dms-cloudwatch-logs-not-appearing/
 # v20
-# Oracle  v21 :  soe - all drop procedure and packages
+# Oracle  v22 :  soe - all drop procedure and packages
 # Tomcat  v20 : oracle.jsp, aurora.jsp
 # Windows v20 : SCT, SQL Developer, MySQL WB, query.txt, index.txt(6 index)
 Description:
@@ -303,7 +303,7 @@ Resources:
       NetworkInterfaces:
         - NetworkInterfaceId: !Ref OracleNetworkInterface
           DeviceIndex: 0
-      ImageId: ami-0e6809f8165086b9b
+      ImageId: ami-0a6ef0a0bbaeaca73
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-OracleServer"
