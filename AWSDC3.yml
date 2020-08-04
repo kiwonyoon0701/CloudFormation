@@ -262,7 +262,7 @@ Resources:
   TomcatNetworkInterface:
     Type: AWS::EC2::NetworkInterface
     Properties:
-      SubnetId: !Ref PrivateSubnet1
+      SubnetId: !Ref PublicSubnet1
       PrivateIpAddress: 10.200.1.102
       GroupSet:
         - !Ref TomcatSecurityGroup
@@ -270,7 +270,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-TomcatENI"
-    DependsOn: PrivateSubnet1RouteTableAssociation
+    DependsOn: PublicSubnet1RouteTableAssociation
 
   TomcatOnPremInstance:
     Type: AWS::EC2::Instance
