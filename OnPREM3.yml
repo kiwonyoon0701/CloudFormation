@@ -286,7 +286,7 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       SubnetId: !Ref PublicSubnet1
-      PrivateIpAddress: 10.100.101.101
+      PrivateIpAddress: 10.100.1.101
       GroupSet:
         - !Ref OracleSecurityGroup
       SourceDestCheck: true
@@ -335,7 +335,7 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       SubnetId: !Ref PublicSubnet1
-      PrivateIpAddress: 10.100.101.102
+      PrivateIpAddress: 10.100.1.102
       GroupSet:
         - !Ref TomcatSecurityGroup
       SourceDestCheck: true
@@ -380,7 +380,7 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       SubnetId: !Ref PublicSubnet1
-      PrivateIpAddress: 10.100.101.103
+      PrivateIpAddress: 10.100.1.103
       GroupSet:
         - !Ref WindowsSecurityGroup
       SourceDestCheck: true

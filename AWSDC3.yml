@@ -263,7 +263,7 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       SubnetId: !Ref PrivateSubnet1
-      PrivateIpAddress: 10.200.101.102
+      PrivateIpAddress: 10.200.1.102
       GroupSet:
         - !Ref TomcatSecurityGroup
       SourceDestCheck: true
